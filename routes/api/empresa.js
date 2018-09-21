@@ -52,7 +52,7 @@ router.put('/uEmpresa', (req, res, next)=>{
     pool.getConnection((err, con) => {
         if (err) throw err;
         let qry = `UPDATE company SET nombre_legal = ${pool.escape(nombre_legal)}, nombre_comercial = ${pool.escape(nombre_comercial)},
-         rfc = ${pool.escape(rfc)}, telefono = ${pool.escape(tel)} WHERE id = ${pool.escape(empresa_id)}`
+         rfc = ${pool.escape(rfc)}, telefono = ${pool.escape(tel)} WHERE id = ${pool.escape(empresa_id)}`;
         con.query(qry, (err, result)=>{
             con.release();
             if (err) throw err;

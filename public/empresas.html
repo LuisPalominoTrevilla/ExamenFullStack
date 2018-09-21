@@ -1,0 +1,193 @@
+<html>
+    <head>
+        <title>Luis Palomino Trevilla</title>
+        <script src="./jquery/jquery-3.3.min.js"></script>
+        <script src="./vue.js"></script>
+        <link rel="stylesheet" href="./Bootstrap/bootstrap.min.css" type="text/css"/>
+        <script src="./Bootstrap/bootstrap.min.js"></script>
+        <style>
+          .row{
+            margin-top: 5rem;
+          }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Exámen Full Stack</a>
+            <div class="" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                  <a class="nav-link" href="/Empresas">Empresas <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/Usuarios">Usuarios</a>
+                </li>
+              </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+
+          <div class="row">
+            <div class="col-12">
+              <!-- CREATE NEW COMPANY -->
+              <button type="button" class="btn btn-light" data-toggle="modal" data-target="#createModal">
+                  Crear Empresa
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Crear Empresa</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                          <form>
+                            <div class="form-group">
+                              <label for="l_name">Nombre Legal</label>
+                              <input type="text" class="form-control" id="l_name">
+                            </div>
+                            <div class="form-group">
+                              <label for="c_name">Nombre Comercial</label>
+                              <input type="text" class="form-control" id="c_name">
+                            </div>
+                            <div class="form-group">
+                              <label for="RFC">RFC</label>
+                              <input type="text" class="form-control" id="RFC">
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono">Teléfono</label>
+                                <input type="text" class="form-control" id="telefono">
+                              </div>
+                            <button type="button" class="btn btn-primary" class="save-changes" onclick="createEmpresa(event); return false">Guardar cambios</button>
+                          </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="row" id="empresas">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="empresa in empresas">
+              <div class="card">
+                <h5 class="card-header">{{empresa.nombre_legal}}</h5>
+                <div class="card-body">
+                  <h5 class="card-title">Teléfono: {{empresa.telefono}}</h5>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Nombre Comercial: {{empresa.nombre_comercial}}</li>
+                    <li class="list-group-item">RFC: {{empresa.rfc}}</li>
+                    <li class="list-group-item">Fecha Registro: {{empresa.fecha_registro}}</li>
+                  </ul>
+                  <button class="btn btn-danger" class="delete" @click="deleteEmpresa(empresa.id)">Borrar</button>
+                  <a class="btn btn-info" class="edit" data-toggle="modal" :data-target="'#empresa'+empresa.id">Editar</a>
+                </div>
+              </div>
+
+              <!-- MODAL -->
+
+              <div class="modal fade" :id="'empresa'+empresa.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Editar {{empresa.nombre_legal}}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <form v-on:submit.prevent="update(empresa.id, empresa.nombre_legal, empresa.nombre_comercial, empresa.rfc, empresa.telefono)">
+                          <div class="form-group">
+                            <label for="legal_name">Nombre Legal</label>
+                            <input type="text" class="form-control" id="legal_name" v-model="empresa.nombre_legal" name="legal_name">
+                          </div>
+                          <div class="form-group">
+                            <label for="comercial_name">Nombre Comercial</label>
+                            <input type="text" class="form-control" id="comercial_name" v-model="empresa.nombre_comercial" name="name">
+                          </div>
+                          <div class="form-group">
+                            <label for="rfc">RFC</label>
+                            <input type="text" class="form-control" id="rfc" v-model="empresa.rfc" name="rfc">
+                          </div>
+                          <div class="form-group">
+                              <label for="phone">Teléfono</label>
+                              <input type="text" class="form-control" id="phone" v-model="empresa.telefono" name="phone">
+                            </div>
+                          <input type="hidden" name="id" id="id" v-bind:value="empresa.id">
+                          <button class="btn btn-primary" class="save-changes">Guardar cambios</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          const empresas = new Vue({
+            el: '#empresas',
+            data: {
+              empresas: [
+              ]
+            },
+            methods: {
+              update: function(empresa_id, nombre_legal, nombre_comercial, rfc, phone){
+                $.ajax({
+                  url: "/api/uEmpresa",
+                  method: "PUT",
+                  data: {legal_name: nombre_legal, name: nombre_comercial, id: empresa_id, rfc: rfc, phone: phone}
+                }).done((data)=>{
+                  reloadData();
+                  $('.modal').modal('hide');
+                });
+              },
+              deleteEmpresa: function(empresa_id){
+                $.ajax({
+                  url: "/api/dEmpresa/"+empresa_id,
+                  method: "DELETE"
+                }).done((data)=>{
+                  reloadData();
+                });
+              }
+            }
+          })
+
+          const reloadData = ()=>{
+            empresas.empresas = [];
+            $.getJSON("/api/gEmpresas", (data)=>{
+              for (let obj of data){
+                empresas.empresas.push(obj);
+              }
+            });
+          }
+
+          reloadData();
+          
+          function createEmpresa(e){
+            e.preventDefault();
+            let legal_name = $('#l_name')[0].value;
+            let name = $('#c_name')[0].value;
+            let rfc = $('#RFC')[0].value;
+            let phone = $('#telefono')[0].value;
+            $.ajax({
+              url: "/api/cEmpresa",
+              method: "POST",
+              data: {legal_name: legal_name, name: name, rfc: rfc, phone: phone}
+            }).done((data)=>{
+              reloadData();
+              $('.modal').modal('hide');
+            });
+          }
+        </script>
+    </body>
+</html>

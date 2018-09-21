@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, './public')));
 const standardRouting = require('./routes/pages/index');
 const apiRouting = require('./routes/api/api.js');
 
-app.get('/', standardRouting);
+app.use('/', standardRouting);
 app.use('/api', apiRouting);
 
 app.listen(3000);
