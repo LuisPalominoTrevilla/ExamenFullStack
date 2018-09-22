@@ -30,7 +30,7 @@ router.post('/cUsuario', (req, res, next) => {
 router.get('/gUsuarios', (req, res, next) => {
     pool.getConnection((err, con)=>{
         if (err) throw err;
-        con.query(`SELECT u.id, CONCAT(nombre, ' ', apellido) AS nombre, 
+        con.query(`SELECT u.id, nombre, apellido, 
         correo, password, r.description AS puesto, c.nombre_legal AS empresa 
         FROM user u JOIN role r ON u.rol_id = r.id JOIN company c ON u.company_id = c.id`, (err, result)=> {
             con.release();
@@ -43,7 +43,7 @@ router.get('/gUsuario/:id', (req, res, next) => {
     user_id = req.params.id;
     pool.getConnection((err, con)=>{
         if (err) throw err;
-        con.query(`SELECT u.id, CONCAT(nombre, ' ', apellido) AS nombre, 
+        con.query(`SELECT u.id, nombre, apellido, 
         correo, password, r.description AS puesto, c.nombre_legal AS empresa 
         FROM user u JOIN role r ON u.rol_id = r.id JOIN company c ON u.company_id = c.id WHERE u.id = ${user_id}`, (err, result)=> {
             con.release();
@@ -67,7 +67,8 @@ router.put('/uUsuario', (req, res, next)=>{
         bcrypt.hash(password, 10, (err, hash) => {
             let qry = `UPDATE user SET nombre = ${pool.escape(nombre)}, apellido = ${pool.escape(apellido)},
             correo = ${pool.escape(correo)}, password = ${pool.escape(hash)},rol_id = ${pool.escape(rol)},
-            company_id = ${pool.escape(company)} WHERE id = ${pool.escape(usuario_id)}`
+            company_id = ${pool.escape(company)} WHERE id = ${pool.escape(usuario_id)}`;
+            console.log(qry);
             con.query(qry, (err, result)=>{
                con.release();
                if (err) throw err;

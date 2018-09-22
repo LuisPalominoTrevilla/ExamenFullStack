@@ -30,98 +30,122 @@
 
           <div class="row">
             <div class="col-12">
-              <!-- CREATE NEW COMPANY -->
-              <button type="button" class="btn btn-light" data-toggle="modal" data-target="#createModal">
-                  Crear Empresa
+              <!-- CREATE NEW USER -->
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#createModal">
+                    Crear Usuario
                 </button>
-                
-                <!-- Modal -->
+              
+                <!-- MODAL -->
+
                 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Crear Empresa</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                          <form>
-                            <div class="form-group">
-                              <label for="l_name">Nombre Legal</label>
-                              <input type="text" class="form-control" id="l_name">
-                            </div>
-                            <div class="form-group">
-                              <label for="c_name">Nombre Comercial</label>
-                              <input type="text" class="form-control" id="c_name">
-                            </div>
-                            <div class="form-group">
-                              <label for="RFC">RFC</label>
-                              <input type="text" class="form-control" id="RFC">
-                            </div>
-                            <div class="form-group">
-                                <label for="telefono">Teléfono</label>
-                                <input type="text" class="form-control" id="telefono">
-                              </div>
-                            <button type="button" class="btn btn-primary" class="save-changes" onclick="createEmpresa(event); return false">Guardar cambios</button>
-                          </form>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Crear Usuario</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="name">Nombre</label>
+                                    <input type="text" class="form-control" id="name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="last_name">Apellido</label>
+                                    <input type="text" class="form-control" id="last_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="mail">Correo</label>
+                                    <input type="text" class="form-control" id="mail">
+                                </div>
+                                <div class="form-group">
+                                  <label for="password">Password</label>
+                                  <input type="text" class="form-control" id="password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nPuesto">Puesto</label>
+                                    <select class="custom-select" id="nPuesto">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nEmpresa">Empresa</label>
+                                    <select class="custom-select" id="nEmpresa">
+                                    </select>
+                                </div>
+                                      
+                              <button class="btn btn-primary" onclick="createUsuario(event); return false">Guardar cambios</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
                 </div>
             </div>
           </div>
 
-          <div class="row" id="empresas">
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="empresa in empresas">
+          <div class="row" id="usuarios">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="usuario in usuarios">
               <div class="card">
-                <h5 class="card-header">{{empresa.nombre_legal}}</h5>
+                <h5 class="card-header">{{usuario.nombre}} {{usuario.apellido}}</h5>
                 <div class="card-body">
-                  <h5 class="card-title">Teléfono: {{empresa.telefono}}</h5>
+                  <h5 class="card-title">Correo: {{usuario.correo}}</h5>
                   <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Nombre Comercial: {{empresa.nombre_comercial}}</li>
-                    <li class="list-group-item">RFC: {{empresa.rfc}}</li>
-                    <li class="list-group-item">Fecha Registro: {{empresa.fecha_registro}}</li>
+                    <li class="list-group-item">Password: {{usuario.password}}</li>
+                    <li class="list-group-item">Puesto: {{usuario.puesto}}</li>
+                    <li class="list-group-item">Empresa: {{usuario.empresa}}</li>
                   </ul>
-                  <button class="btn btn-danger" class="delete" @click="deleteEmpresa(empresa.id)">Borrar</button>
-                  <a class="btn btn-info" class="edit" data-toggle="modal" :data-target="'#empresa'+empresa.id">Editar</a>
+                  <button class="btn btn-danger" @click="deleteUsuario(usuario.id)">Borrar</button>
+                  <a class="btn btn-info" data-toggle="modal" :data-target="'#usuario'+usuario.id">Editar</a>
                 </div>
               </div>
 
               <!-- MODAL -->
 
-              <div class="modal fade" :id="'empresa'+empresa.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal fade" :id="'usuario'+usuario.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Editar {{empresa.nombre_legal}}</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Editar {{usuario.nombre}} {{usuario.apellido}}</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body">
-                        <form v-on:submit.prevent="update(empresa.id, empresa.nombre_legal, empresa.nombre_comercial, empresa.rfc, empresa.telefono)">
-                          <div class="form-group">
-                            <label for="legal_name">Nombre Legal</label>
-                            <input type="text" class="form-control" id="legal_name" v-model="empresa.nombre_legal" name="legal_name">
-                          </div>
-                          <div class="form-group">
-                            <label for="comercial_name">Nombre Comercial</label>
-                            <input type="text" class="form-control" id="comercial_name" v-model="empresa.nombre_comercial" name="name">
-                          </div>
-                          <div class="form-group">
-                            <label for="rfc">RFC</label>
-                            <input type="text" class="form-control" id="rfc" v-model="empresa.rfc" name="rfc">
-                          </div>
-                          <div class="form-group">
-                              <label for="phone">Teléfono</label>
-                              <input type="text" class="form-control" id="phone" v-model="empresa.telefono" name="phone">
+                        <form v-on:submit.prevent="update(usuario.id, usuario.nombre, usuario.apellido, usuario.correo, usuario.password)">
+                            <div class="form-group">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" v-model="usuario.nombre">
                             </div>
-                          <input type="hidden" name="id" id="id" v-bind:value="empresa.id">
-                          <button class="btn btn-primary" class="save-changes">Guardar cambios</button>
+                            <div class="form-group">
+                                <label for="apellido">Apellido</label>
+                                <input type="text" class="form-control" id="apellido" v-model="usuario.apellido">
+                            </div>
+                            <div class="form-group">
+                                <label for="correo">Correo</label>
+                                <input type="text" class="form-control" id="correo" v-model="usuario.correo">
+                            </div>
+                            <div class="form-group">
+                              <label for="passwd">Password</label>
+                              <input type="text" class="form-control" id="passwd" v-model="usuario.password">
+                            </div>
+                            <div class="form-group">
+                                <label :for="'puesto'+usuario.id">Puesto</label>
+                                <select class="custom-select" :id="'puesto'+usuario.id">
+                                    <option v-for="role in roles" :selected="usuario.puesto == role.description ? 'selected':''">{{role.description}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label :for="'empresa'+usuario.id">Empresa</label>
+                                <select class="custom-select" :id="'empresa'+usuario.id">
+                                    <option v-for="empresa in companies" :selected="usuario.empresa == empresa.nombre ? 'selected':''">{{empresa.nombre}}</option>
+                                </select>
+                            </div>
+                                  
+                          <button class="btn btn-primary">Guardar cambios</button>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -130,30 +154,38 @@
                   </div>
                 </div>
               </div>
+              <!-- FIN MODAL -->
             </div>
           </div>
         </div>
         <script>
-          const empresas = new Vue({
-            el: '#empresas',
+          const usuarios = new Vue({
+            el: '#usuarios',
             data: {
-              empresas: [
+              usuarios: [
+              ],
+              roles: [
+              ],
+              companies: [
               ]
             },
             methods: {
-              update: function(empresa_id, nombre_legal, nombre_comercial, rfc, phone){
+              update: function(usuario_id, nombre, apellido, correo, password){
+                let role = getRoleId($('#puesto'+usuario_id).find(":selected").text());
+                let company = getCompanyId($('#empresa'+usuario_id).find(":selected").text());
+
                 $.ajax({
-                  url: "/api/uEmpresa",
+                  url: "/api/uUsuario",
                   method: "PUT",
-                  data: {legal_name: nombre_legal, name: nombre_comercial, id: empresa_id, rfc: rfc, phone: phone}
+                  data: {id: usuario_id, name: nombre, last_name: apellido, mail: correo, password: password, rol: role, company: company}
                 }).done((data)=>{
                   reloadData();
                   $('.modal').modal('hide');
                 });
               },
-              deleteEmpresa: function(empresa_id){
+              deleteUsuario: function(usuario_id){
                 $.ajax({
-                  url: "/api/dEmpresa/"+empresa_id,
+                  url: "/api/dUsuario/"+usuario_id,
                   method: "DELETE"
                 }).done((data)=>{
                   reloadData();
@@ -163,26 +195,68 @@
           })
 
           const reloadData = ()=>{
-            empresas.empresas = [];
-            $.getJSON("/api/gEmpresas", (data)=>{
+            usuarios.usuarios = [];
+            $.getJSON("/api/gUsuarios", (data)=>{
               for (let obj of data){
-                empresas.empresas.push(obj);
+                usuarios.usuarios.push(obj);
               }
             });
           }
 
+          const roles = [];
+          const companies = [];
+
+          $.get("/api/gRoles", (data)=>{
+              for (role of data){
+                  roles.push(role);
+                  usuarios.roles.push(role);
+                  $('#nPuesto').append('<option>'+role.description+'</option>');
+              }
+          });
+
+          $.get("/api/gEmpresas", (data)=>{
+              for (empresa of data){
+                  let tmp = {};
+                  tmp.id = empresa.id;
+                  tmp.nombre = empresa.nombre_legal;
+                  companies.push(tmp);
+                  usuarios.companies.push(tmp);
+                  $('#nEmpresa').append('<option>'+tmp.nombre+'</option>');
+              }
+          });
+
+          const getRoleId = (name)=> {
+              for (role of roles){
+                  if (role.description == name) {
+                      return role.id;
+                  }
+              }
+              return -1;
+          };
+
+          const getCompanyId = (name)=> {
+              for (company of companies){
+                  if (company.nombre == name) {
+                      return company.id;
+                  }
+              }
+              return -1;
+          };
+
           reloadData();
           
-          function createEmpresa(e){
+          function createUsuario(e){
             e.preventDefault();
-            let legal_name = $('#l_name')[0].value;
-            let name = $('#c_name')[0].value;
-            let rfc = $('#RFC')[0].value;
-            let phone = $('#telefono')[0].value;
+            let name = $('#name')[0].value;
+            let last_name = $('#last_name')[0].value;
+            let mail = $('#mail')[0].value;
+            let password = $('#password')[0].value;
+            let rol = getRoleId($('#nPuesto').find(":selected").text());
+            let company = getCompanyId($('#nEmpresa').find(":selected").text());
             $.ajax({
-              url: "/api/cEmpresa",
+              url: "/api/cUsuario",
               method: "POST",
-              data: {legal_name: legal_name, name: name, rfc: rfc, phone: phone}
+              data: {name: name, last_name: last_name, mail: mail, password: password, rol: rol, company: company}
             }).done((data)=>{
               reloadData();
               $('.modal').modal('hide');

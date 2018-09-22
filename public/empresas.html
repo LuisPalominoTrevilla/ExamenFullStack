@@ -63,7 +63,7 @@
                                 <label for="telefono">Teléfono</label>
                                 <input type="text" class="form-control" id="telefono">
                               </div>
-                            <button type="button" class="btn btn-primary" class="save-changes" onclick="createEmpresa(event); return false">Guardar cambios</button>
+                            <button type="button" class="btn btn-primary" onclick="createEmpresa(event); return false">Crear</button>
                           </form>
                       </div>
                       <div class="modal-footer">
@@ -121,7 +121,7 @@
                               <input type="text" class="form-control" id="phone" v-model="empresa.telefono" name="phone">
                             </div>
                           <input type="hidden" name="id" id="id" v-bind:value="empresa.id">
-                          <button class="btn btn-primary" class="save-changes">Guardar cambios</button>
+                          <button class="btn btn-primary">Guardar cambios</button>
                         </form>
                     </div>
                     <div class="modal-footer">
