@@ -1,5 +1,8 @@
 # Exámen Full Stack
 
+### Nota:
+La interfaz web asume que los datos a introducir son correctos
+
 Instrucciones:
 
 - **1** clonar repositorio
