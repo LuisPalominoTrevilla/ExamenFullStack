@@ -5,8 +5,9 @@ La interfaz web asume que los datos a introducir son correctos
 
 Instrucciones:
 
-- **1** clonar repositorio
-- **2** Asegurarse de tener conexión a internet
-- **3** npm install (Dentro de la carpeta)
-- **4** npm start
-- **5** Abrir en el navegador localhost:3000
+- **clonar repositorio**
+- **Asegurarse de tener conexión a internet**
+- **npm install (Dentro de la carpeta)**
+- **npm start**
+- **Abrir en el navegador localhost:3000**
+- **Usar la barra de navegación para probar la aplicación**
